@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+Thank you for your patience, your next survey is loading…
+
+<script>
+const email = new URLSearchParams(window.location.search).get("email");
+
+if (!email) {
+  document.body.innerText = "Missing email.";
+  throw new Error("Missing email");
+}
+
+fetch("https://defaultbd7eddbe7b5442d7a1f0f8166de666.30.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3409d4d7aeca424cb4ec99de6775a7d8/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jvm-anR7ghyhiFNzFbFutkbYszdoh5uaTBlR2TCsQ4Y", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email })
+})
+.then(res => res.json())
+.then(data => {
+  if (!data.redirectUrl) {
+    document.body.innerText = "Thank you for your time, no more pending surveys.";
+    return;
+  }
+  window.location.href = data.redirectUrl;
+})
+.catch(() => {
+  document.body.innerText = "Error connecting to system.";
+});
+</script>
+
+</body>
+</html>
